@@ -1,0 +1,17 @@
+<h1>Reservar Clase</h1>
+
+<form action="/book" method="POST">
+    <label> ID Usuario:</label>
+    <input type="text" name="user_id"><br><br>
+
+    <label>Clase:</label>
+    <select name="class_id">
+        {% for c in clases%} <!-- Es un loop en HTML (usando Jinja) -->
+        <option value="{{c.id}}"> 
+            {{c.name}} | {{c.schedule}} <!-- Muestra datos de Python en HTML -->
+        </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Reservar</button>
+</form>
