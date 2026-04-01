@@ -1,0 +1,36 @@
+<h1>Dashboard Admin</h1>
+
+<h2>Usuarios</h2>
+<table border="1">
+<tr>
+    <th>Nombre</th>
+    <th>Email</th>
+    <th>Rol</th>
+</tr>
+{% for u in users%}
+<tr>
+    <td>{{u.name}}</td>
+    <td>{{u.email}}</td>
+    <td>{{u.role}}</td>
+</tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+
+<h2>Clases</h2>
+<ul>
+    {% for c in clases%}
+        <li> {{ c.name}} - {{c.schedule}}</li>
+    {% endfor %}
+</ul>
+
+<h2>Crear nueva clase</h2>
+<form action="/create_class" method ="POST">
+     <input type="text" name="name" placeholder="Nombre Clase"><br><br>
+     <input type="datetime-local" name="schedule"><br><br>
+     <button type="submit" class="btn-primary">Crear Clase</button>
+</form>
+
+<hr>
