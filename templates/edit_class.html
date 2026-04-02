@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css')}}">
+
+<h1> Editar clase</h1>
+
+<form action="/update_class" method="POST">
+    <input type="hidden" name="id" value="{{ clase.id }}">
+    
+    <input type="text" name="name" value="{{ clase.name }}">
+
+    <input type="datetime-local" name="schedule"><br><br>
+
+    <button type="submit">Actualizar</button>
+
+</form>
