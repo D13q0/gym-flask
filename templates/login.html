@@ -1,20 +1,24 @@
 <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css')}}">
 
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<h2 class="text-center mb-4">Login</h2>
 <form action="/login" method="POST">
 
-  <div class="form-group row">
-    <label for="inputEmail" class="col-sm-1 col-form-label">Email</label>
-    <div class="col-sm-1">
-      <input type="text" name="email" class="form-control" id="inputEmail">
+  <div class="mb-3 text-center">
+        <input type="email" name="email" placeholder="Email" required>
     </div>
-  </div>
-  <br>
-  <div class="form-group row">
-    <label for="inputPassword" class="col-sm-1 col-form-label">Password</label>
-    <div class="col-sm-1">
-      <input type="password" name="password" class="form-control" id="inputPassword">
+    <div class="mb-3 text-center">
+        <input type="password" name="password" placeholder="Password" required>
     </div>
-  </div>
   <br>
-  <button type="submit" class="btn btn-primary mb-2">Ingresar</button>
+  <div class="mb-3 text-center">
+    <button type="submit" class="btn btn-primary mb-2">Ingresar</button>
+  </div>
+  <div class="mb-3 text-center">
+  <a href="/register" class="btn btn-success">Registrarse</a>
+  </div>
 </form>
+

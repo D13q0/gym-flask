@@ -26,11 +26,36 @@ def login():
             session["user_id"] = user.id
             session["user_name"] = user.name
             session["role"] = user.role
-            return f"Bienvenido {user.name}"
+            
+            if user.role =="admin":
+                 return redirect(url_for("admin.dashboard")) 
+            else:
+                     return redirect(url_for("user.home"))
    else:
-            return "Credenciales incorrectas"
+        return render_template("login.html", error="Credenciales incorrectas")
    
 @auth.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("auth.login"))
+
+@auth.route("/register",methods=["GET","POST"])
+def register():
+     if request.method == "GET":
+          return render_template("register.html")
+     
+     name = request.form["name"]
+     email = request.form["email"]
+     password = request.form["password"]
+
+     conn = get_connection()
+     cursor = conn.cursor()
+
+     cursor.execute("""
+              INSERT INTO users (name, email, password, role)
+              VALUES (?, ?, ?, 'user')              
+               """, (name, email, password))
+     
+     conn.commit()
+
+     return redirect(url_for("auth.login"))

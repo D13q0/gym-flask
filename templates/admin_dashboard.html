@@ -1,72 +1,105 @@
 <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css')}}">
 
-<nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container-fluid d-flex justify-content-between">
-        <span class="navbar-brand">Gym XXXX</span>
-            <a href="/logout" class="btn btn-outline-light">Logout</a>
+
+<nav class="navbar navbar-expand-lg bg-primary " data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Gym XXXX</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/bookings">Registro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
-
 <div class="container mt-5">
 
-    <h1 class="mb-4">Dashboard Admin</h1>
+    <h1 class="mb-4 text-center">Dashboard Admin</h1>
 
 </div>
-<h2>Usuarios</h2>
-<table border="1">
-    <tr>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Rol</th>
-    </tr>
-    {% for u in users%}
-    <tr>
-        <td>{{u.name}}</td>
-        <td>{{u.email}}</td>
-        <td>{{u.role}}</td>
-    </tr>
-    {% endfor %}
-</table>
-
-<hr>
-
-
-<h2>Clases</h2>
-<table class="table table-striped table-hover">
-    <thead class="table-dark">
-        <tr>
+<div class="text-center mb-4">
+    <h2>Usuarios</h2>
+</div>
+<div class="d-flex justify-content-center">
+    <table border="1" class="table table-bordered w-auto">
+        <tr class=" text-center">
             <th>Nombre</th>
-            <th>Horario</th>
+            <th>Email</th>
+            <th>Rol</th>
             <th>Acciones</th>
         </tr>
-    </thead>
-    {% for c in clases %}
-    <tr>
-        <td>{{c.name}}</td>
-        <td>{{c.schedule}}</td>
-        <td>
-            <a href="/delete_class/{{c.id}}" class="btn btn-danger"
+        {% for u in users%}
+        <tr>
+            <td>{{u.name}}</td>
+            <td>{{u.email}}</td>
+            <td>{{u.role}}</td>
+            <td>
+            <a  href="/edit_user/{{u.id}}" class="btn btn-success">Editar</a>
+            <a href="/delete_user/{{u.id}}" class="btn btn-danger"
                 onclick="return confirm('¿Seguro que quieres eliminar?')">Eliminar</a>
-            <a href="/edit_class/{{c.id}}" class="btn btn-success">Editar</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+            
+            </td>
+            
+        </tr>
+        {% endfor %}
+    </table>
 
-
+</div>
+<div class="text-center mb-4">
+    <h2>Clases</h2>
+</div>
+<div class="d-flex justify-content-center">
+    <table class="table table-striped table-boredered w-auto">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th>Nombre</th>
+                <th>Horario</th>
+                <th>Capacidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        {% for c in clases %}
+        <tr>
+            <td>{{c.name}}</td>
+            <td>{{c.schedule}}</td>
+            <td>{{c.capacity}}</td>
+            <td>
+                <a href="/edit_class/{{c.id}}" class="btn btn-success">Editar</a>
+                <a href="/delete_class/{{c.id}}" class="btn btn-danger"
+                    onclick="return confirm('¿Seguro que quieres eliminar?')">Eliminar</a>            
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="mb-3 text-center">
 <h2>Crear nueva clase</h2>
+</div>
 <form action="/create_class" method="POST" class="mb-5">
-    <div class="mb-3">
+    <div class="mb-3 text-center">
         <label class="form-label">Nombre</label>
-        <input type="text" name="name" class="form-control">
+        <input type="text" name="name" class="form-control w-auto mx-auto">
     </div>
-    <div class="mb-3">
+    <div class="mb-3 text-center">
         <label class="form-label">Horario</label>
-        <input type="datetime-local" name="schedule" class="form-control">
+        <input type="datetime-local" name="schedule" class="form-control w-auto mx-auto">
     </div>
-
+    <div class="mb-3 text-center">
+        <label class="form-label">Capacidad</label>
+        <input type="number" name="capacity" class="form-control w-auto mx-auto">
+    </div>
+    <div class="mb-3 text-center">
     <button class="btn btn-primary">Crear Clase</button>
+    </div>
 </form>
 
 <hr>

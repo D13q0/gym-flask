@@ -42,7 +42,7 @@ def reservar():
 
    conn = get_connection()
    cursor = conn.cursor()
-
+   
 
    #Validar Usuario
    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
@@ -67,7 +67,9 @@ def reservar():
    existe = cursor.fetchone()
    
    if existe:
-      return "Ya reservaste esta clase"
+      cursor.execute("SELECT * FROM classes")
+      clases = cursor.fetchall()
+      return render_template("index.html", clases=clases, error="Ya reservaste esta clase")
 
    cursor.execute(
       "INSERT INTO bookings (user_id, class_id) VALUES (?, ?)",
@@ -75,5 +77,27 @@ def reservar():
    )
    conn.commit()
 
-   return("<h2 style='color:green'>La reserva ha sido exitosa</h2>")
+   cursor.execute("SELECT * FROM classes")
+   clases = cursor.fetchall()
+   return render_template("index.html", clases=clases,  success = "Reservaste con exito")
 
+@user.route("/bookings")
+def ver_reservas():
+   conn = get_connection()
+   cursor = conn.cursor()
+
+   cursor.execute("""
+        SELECT users.name, classes.name, classes.schedule
+        FROM bookings
+        JOIN users ON bookings.user_id = users.id
+        JOIN classes ON bookings.class_id= classes.id
+    """)
+   
+   reservas = cursor.fetchall()
+
+   resultado = "<h1>Reservas</h1>"
+
+   for r in reservas:
+      resultado = resultado + f"<p>{r[0]} - {r[1]} - {r[2]}</p>"
+      
+   return resultado

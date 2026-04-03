@@ -1,11 +1,21 @@
 <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css')}}">
-
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container-fluid d-flex justify-content-between">
+        <span class="navbar-brand">Gym XXXX</span>
+            <a href="/logout" class="btn btn-outline-light">Logout</a>
+    </div>
+</nav>
 <h1>Reservar Clase</h1>
 
-<form action="/book" method="POST">
-    <label>ID Usuario:</label>
-    <input type="text" name="user_id"><br><br>
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
 
+{% if success %}
+    <div class="alert alert-success">{{ success }}</div>
+{% endif %}
+
+<form action="/book" method="POST">
     <label>Clase:</label>
     <select name="class_id">
         {% for c in clases%} <!-- Es un loop en HTML (usando Jinja) -->

@@ -35,7 +35,7 @@ def dashboard():
                            clases=clases,
                            reservas=reservas)
 
-#CRUD
+#CRUD CLASES
 
 @admin.route("/create_class", methods=["POST"])
 def create_class():
@@ -44,12 +44,13 @@ def create_class():
     
     name = request.form["name"]
     schedule = request.form["schedule"].replace("T", " ")
+    capacity = request.form["capacity"]
     
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO classes (name,schedule) VALUES (?, ?)", (name,schedule)
+        "INSERT INTO classes (name,schedule,capacity) VALUES (?, ?,?)", (name,schedule,capacity)
     )
 
     conn.commit()
@@ -63,12 +64,13 @@ def update_class():
     id =request.form["id"]
     name = request.form["name"]
     schedule = request.form["schedule"].replace("T", " ")
+    capacity = request.form["capacity"]
 
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("UPDATE classes SET name = ?, schedule = ? WHERE id = ?",
-                   (name, schedule, id))
+    cursor.execute("UPDATE classes SET name = ?, capacity = ?,  schedule = ? WHERE id = ?",
+                   (name, capacity, schedule, id))
     
     conn.commit()
 
@@ -85,8 +87,8 @@ def delete_class(id):
     cursor.execute("DELETE FROM classes WHERE id = ?",(id,))
     conn.commit()
 
-    return redirect(url_for("admin.dashboard"))
-    
+    return redirect(url_for("admin.dashboard"))    
+
 @admin.route("/edit_class/<int:id>")
 def edit_class(id):
     if "user_id" not in session or session["role"] != "admin":
@@ -99,8 +101,55 @@ def edit_class(id):
 
     return render_template("edit_class.html", clase=clase)
 
-#Ver reservas de todos los clientes
+#CRUD USER
 
+@admin.route("/delete_user/<int:id>")
+def delete_user(id):
+    if "user_id" not in session or session["role"] != "admin":
+        return "No autorizado"
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM bookings WHERE user_id = ?",(id,))
+    cursor.execute("DELETE FROM users WHERE id = ?", (id,))
+    conn.commit()
+
+    return redirect(url_for("admin.dashboard"))
+
+@admin.route("/edit_user/<int:id>")
+def edit_user(id):
+    if "user_id" not in session or session["role"] != "admin":
+        return "No autorizado"
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE id = ?", (id,))
+    user= cursor.fetchone()
+
+    return render_template("edit_user.html", user=user)
+
+@admin.route("/update_user", methods=["POST"])
+def update_user():
+    if "user_id" not in session or session["role"] != "admin":
+        return "No autorizado"
+    
+    id=request.form["id"]
+    name=request.form["name"]
+    email=request.form["email"]
+    role=request.form["role"]
+    password=request.form['password']
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE users SET name = ?, email = ?, role = ?, password = ? WHERE id = ?",
+                   (name, email, role, password, id))
+    
+    conn.commit()
+
+    return redirect(url_for("admin.dashboard"))
+
+#Ver reservas de todos los clientes
 @admin.route("/bookings")
 def ver_reservas():
    if "user_id" not in session or session["role"] != "admin":
